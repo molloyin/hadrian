@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "hadrian"
+version = "0.1.0"
+description = "Mere mortal (rc car) recieving instructions from the gods (chatgpt), powered by rpi"
+authors = ["Matthew Molloy <molloyin@icloud.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.32.3"
+openai = "^1.51.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
