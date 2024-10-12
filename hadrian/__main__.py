@@ -1,8 +1,12 @@
 from hadrian.connections.chatgpt import ChatGPTData, ChatGPTClient
 
-data = ChatGPTData("1", "2", "3")
+data = ChatGPTData()
 conn = ChatGPTClient(data)
+
+data.set_image("/Users/molloyin/pictures/jc.jpeg")
 conn.query()
+
+# Event loop and diagnostics seperate threads
 
 # highest priority: prove chatgpt api recieve img and return response
     # looks like we'll need to upload photo to website, API best at retrieving
