@@ -4,8 +4,6 @@ from dataclasses import dataclass, field
 
 @dataclass
 class ChatGPTData:
-    #api_key: str
-    #api_url: str
     image_base64: bytes = field(default=None, init=False)
     responses: list[str] = field(default_factory=list, init=False)
 
