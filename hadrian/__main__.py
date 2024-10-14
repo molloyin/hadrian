@@ -2,21 +2,13 @@ from time import sleep
 from hadrian.connections.database import database
 from hadrian.connections.chatgpt import ChatGPTData, ChatGPTClient
 
-db = database()
 data = ChatGPTData()
 conn = ChatGPTClient(data)
 
-data.set_image("/home/pi64/Pictures/me.jpeg")
+# data.set_image("/home/pi64/Pictures/me.jpeg")
+data.set_image("/Users/molloyin/Pictures/hadrian-target.jpg")
 conn.query()
-
-for i in range(1, 11):   
-    action = 'Turned left' if i % 2 == 0 else 'Turned right'
-    db.add_row(i, action)
-    
-    sleep(1)
-
 # Close the database connection when done
-db.close()
 
 # Event loop and diagnostics seperate threads
 
