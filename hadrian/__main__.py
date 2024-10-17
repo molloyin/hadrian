@@ -5,10 +5,27 @@ from hadrian.connections.chatgpt import ChatGPTData, ChatGPTClient
 data = ChatGPTData()
 conn = ChatGPTClient(data)
 
+db = database()
+db.initialize_db()
 # data.set_image("/home/pi64/Pictures/me.jpeg")
-data.set_image("/Users/molloyin/Pictures/hadrian-target.jpg")
+image_path = "/Users/molloyin/Pictures/hadrian-target.jpg"
+data.set_image(image_path)
+with open(image_path, "rb") as image_file:
+    image_data = image_file.read() 
 conn.query()
-# Close the database connection when done
+
+for i in range (1, 6):
+    action = "Name jeff {i}"
+    db.add_metric(i, action, image_data)
+    print(f"should be adding: {action} {i}, {image_data}")
+    sleep(1)
+
+db.close()
+
+# Perhaps have the camera -> query -> instructions loop a seperate thread from  
+#   commanding RC. This way we can get around i/o blocking and send photos mid iteration
+
+# TODO: times_not_seen counter 
 
 # Event loop and diagnostics seperate threads
 

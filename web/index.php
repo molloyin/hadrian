@@ -1,11 +1,6 @@
 <?php
-$db_path = '/home/pi64/code/hadrian/web/metrics.sqlite';
-
-if (isset($_POST['start_script'])) {
-    exec('python3 -m hadrian > /dev/null 2>&1 &');
-}
-
-// Connect to DB
+// $db_path = '/home/pi64/code/hadrian/web/metrics.sqlite';
+$db_path = '/users/molloyin/code/projects/hadrian/web/metrics.sqlite';
 try {
     $db = new PDO("sqlite:$db_path");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -14,10 +9,9 @@ try {
     exit;
 }
 
-// Fetch all metrics from the database
+// Fetch all metrics 
 $metrics = [];
 $total_iterations = 0;
-
 try {
     $stmt = $db->query('SELECT * FROM metrics');
     $metrics = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -31,33 +25,86 @@ try {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Self-Driving RC Metrics</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadrian Metrics</title>
+    <style>
+        body {
+            background-color: #f4f7fa;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #4a90e2;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4a90e2;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #e9f3fc;
+        }
+        tr:hover {
+            background-color: #d3e4f5;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        .iteration-count {
+            background-color: #4a90e2;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        img {
+            max-width: 150px; 
+            height: auto; 
+        }
+    </style>
 </head>
 <body>
-    <h1>Self-Driving RC Metrics</h1>
-
-    <form method="post">
-        <button type="submit" name="start_script">Start Python Script</button>
-    </form>
-
-    <h2>Metrics:</h2>
-    <table border="1">
-        <tr>
-            <th>Iteration</th>
-            <th>Action</th>
-            <th>Timestamp</th>
-        </tr>
-        <?php foreach ($metrics as $metric): ?>
+    <div class="container">
+        <h1>Hadrian Metrics</h1>
+        <table border="1">
             <tr>
-                <td><?php echo htmlspecialchars($metric['iteration']); ?></td>
-                <td><?php echo htmlspecialchars($metric['action']); ?></td>
-                <td><?php echo htmlspecialchars($metric['timestamp']); ?></td>
+                <th>What The Camera Saw</th> 
+                <th>Action</th>
+                <th>Timestamp</th>
             </tr>
-        <?php endforeach; ?>
-    </table>
+            <?php foreach ($metrics as $metric): ?>
+                <tr>
+                    <td>
+                        <img src="data:image/jpeg;base64,<?php echo base64_encode($metric['image']); ?>" alt="Iteration Image">
+                    </td>
+                    <td><?php echo htmlspecialchars($metric['action']); ?></td>
+                    <td><?php echo htmlspecialchars($metric['timestamp']); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
 
-    <h2>Total Iterations: <?php echo $total_iterations; ?></h2>
+        <h2>Total Iterations: <span class="iteration-count"><?php echo $total_iterations; ?></span></h2>
+    </div>
 </body>
 </html>
