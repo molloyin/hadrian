@@ -45,8 +45,9 @@ class ChatGPTClient:
                     "content": (
                         "You are a helpful assistant and the driver of a RC car. Your goal is to reach "
                         "the basketball seen in the photo by replying with steering controls for the car! "
-                        "Reply in JSON format with the following keys: 'forward' (true/false), 'forward_distance'(in metres), "
-                        "'turn_direction (clockwise/anticlockwise)', 'turn_degrees [0,90]'. If you cannot see the target, stay still and rotate 90 degrees."
+                        "Reply in JSON format with the following keys: 'forward' (true/false), "
+                        "'forward_distance'(in metres), 'turn_direction (clockwise/anticlockwise)', "
+                        "'turn_degrees [0,90]'. If you cannot see the target, stay still and rotate 90 degrees."
                     )
                 },
                 {
