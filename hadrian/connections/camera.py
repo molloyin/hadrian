@@ -1,8 +1,9 @@
-# from picamera import PiCamera 
-# from time import sleep
+from picamera2 import Picamera2
+import time
 
-# camera = PiCamera()
-# camera.start_preview(alpha=192)
-# sleep(1)
-# camera.capture("/home/pi64/Pictures/plzwork.jpg")
-# camera.stop_preview()
+# Takes an image and stores it at /home/pi/Projects/hadrian/current_image.jpg
+def take_image():
+  picam2 = Picamera2()
+  picam2.start()
+  time.sleep(2)
+  picam2.capture_file("/home/pi/Projects/hadrian/current_image.jpg")
