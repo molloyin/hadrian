@@ -4,14 +4,13 @@ from dataclasses import dataclass
 
 @dataclass 
 class database():
-    # db_path = "/home/pi64/code/hadrian/web/metrics.sqlite"
-    db_path = '/users/molloyin/code/projects/hadrian/web/metrics.sqlite'
+    db_path: str
 
     def __post_init__(self):
         self.conn = sqlite3.connect(self.db_path)
         self.cursor = self.conn.cursor()
 
-    def initialize_db(self):
+    def initialize(self):
         self.cursor.execute('''
             DROP TABLE IF EXISTS metrics
         ''')

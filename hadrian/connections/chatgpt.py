@@ -1,4 +1,3 @@
-import json 
 import base64
 from openai import OpenAI
 from dataclasses import dataclass, field
@@ -35,6 +34,11 @@ class ChatGPTClient:
     client = OpenAI()
 
     def query(self) -> None:
+        """
+        Query OpenAI vision API with image saved to data.image_base64.
+        NOTE: make sure to have the following in .bashrc 
+        `export OPEN_AI_KEY=<your key here>` 
+        """
         img = self.data.image_base64
         completion = self.client.chat.completions.create(
             model="gpt-4o-mini",
@@ -44,10 +48,11 @@ class ChatGPTClient:
                     "Content-Type": "application/json",
                     "content": (
                         "You are a helpful assistant and the driver of a RC car. Your goal is to reach "
-                        "the basketball seen in the photo by replying with steering controls for the car! "
+                        "the diet coke can seen in the photo by replying with steering controls for the car! "
                         "Reply in JSON format with the following keys: 'forward' (true/false), "
                         "'forward_distance'(in metres), 'turn_direction (clockwise/anticlockwise)', "
-                        "'turn_degrees [0,90]'. If you cannot see the target, stay still and rotate 90 degrees."
+                        "'turn_degrees [0,90]'. If you cannot see the goal, stay still and rotate 90 degrees. "
+                        "When you hit the target, return 'STOP'"
                     )
                 },
                 {
@@ -55,7 +60,7 @@ class ChatGPTClient:
                     "content": [
                         {
                             "type": "text",
-                            "text": "How do I reach the ball?"
+                            "text": "How do I reach the diet coke?"
                         },
                         {
                             "type": "image_url",
@@ -68,17 +73,5 @@ class ChatGPTClient:
             ],
         )
 
-        response_content = completion.choices[0].message.content
-        print(response_content)
-
-        try:
-            response_json = json.loads(response_content)
-        except json.JSONDecodeError:
-            response_json = {"error": "Invalid JSON response"}
-
-        self.data.set_response(response_json)
-
-
-    @staticmethod
-    def validate_response(resp: str) -> str:
-        return ""
+        resp = completion.choices[0].message.content
+        self.data.set_response(resp)
