@@ -1,5 +1,5 @@
 from enum import Enum
-
+import json
 import RPi.GPIO as GPIO
 import time
 
@@ -101,3 +101,22 @@ class Rover:
             GPIO.output(self.pins["stby"], GPIO.HIGH)
         else:
             GPIO.output(self.pins["stby"], GPIO.LOW)
+
+    # Expected json response format:
+    #
+    # {
+    #   "forward": bool,
+    #   "forward_distance": int,
+    #   "turn_direction": "anticlockwise|clockwise",
+    #   "turn_degrees": int
+    # }
+    def run_from_response(self, instructions: str):
+        instr_json = json.loads(instructions)
+
+        turn_deg = instr_json['turn_degrees']
+        if (turn_deg > 0):
+            turn_direction = TurnDirection.ANTICLOCKWISE if instr_json['turn_direction'] == 'anticlockwise' else TurnDirection.CLOCKWISE
+            self.turn(turn_deg, turn_direction)
+        
+        move_dir = Direction.FORWARD if instr_json['forward'] else Direction.BACKWARD
+        self.move(instr_json['forward_distance'], move_dir)
