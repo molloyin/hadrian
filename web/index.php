@@ -1,6 +1,6 @@
 <?php
-// $db_path = '/home/pi64/code/hadrian/web/metrics.sqlite';
-$db_path = '/users/molloyin/code/projects/hadrian/web/metrics.sqlite';
+// Connect to DB
+$db_path = '/home/pi/Projects/hadrian/web/metrics.sqlite';
 try {
     $db = new PDO("sqlite:$db_path");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -22,8 +22,8 @@ try {
 } catch (Exception $e) {
     echo "Error fetching metrics: " . $e->getMessage();
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

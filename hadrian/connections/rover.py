@@ -1,7 +1,7 @@
-from enum import Enum
-
-import RPi.GPIO as GPIO
 import time
+import json
+import RPi.GPIO as GPIO
+from enum import Enum
 
 class Direction(Enum):
     FORWARD = 1
@@ -13,8 +13,6 @@ class TurnDirection(Enum):
 
 CONTROL_FREQUENCY = 100000
 
-def cleanup():
-    GPIO.cleanup()
 
 class Rover:
     def __init__(self):
@@ -101,3 +99,16 @@ class Rover:
             GPIO.output(self.pins["stby"], GPIO.HIGH)
         else:
             GPIO.output(self.pins["stby"], GPIO.LOW)
+    
+    def run_from_response(self, instructions: str):
+        instr_json = json.loads(instructions)
+        turn_deg = instr_json['turn_degrees']
+        if (turn_deg > 0):
+            turn_direction = TurnDirection.ANTICLOCKWISE if instr_json['turn_direction'] == 'anticlockwise' else TurnDirection.CLOCKWISE
+            self.turn(turn_deg, turn_direction)
+        
+        move_dir = Direction.FORWARD if instr_json['forward'] else Direction.BACKWARD
+        self.move(instr_json['forward_distance'], move_dir)
+
+    def cleanup(self):
+        GPIO.cleanup()
